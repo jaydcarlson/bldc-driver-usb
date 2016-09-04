@@ -1,0 +1,385 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"Clock.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	SystemCoreClock
+  19              		.section	.rodata.SystemCoreClock,"a",%progbits
+  20              		.align	2
+  23              	SystemCoreClock:
+  24 0000 006CDC02 		.word	48000000
+  25              		.global	PeripheralClock
+  26              		.section	.rodata.PeripheralClock,"a",%progbits
+  27              		.align	2
+  30              	PeripheralClock:
+  31 0000 006CDC02 		.word	48000000
+  32              		.section	.text.initClock,"ax",%progbits
+  33              		.align	2
+  34              		.global	initClock
+  35              		.thumb
+  36              		.thumb_func
+  38              	initClock:
+  39              	.LFB0:
+  40              		.file 1 "../Sources/Clock.c"
+   1:../Sources/Clock.c **** /*
+   2:../Sources/Clock.c ****  * clock.c
+   3:../Sources/Clock.c ****  *
+   4:../Sources/Clock.c ****  *  Created on: 04/03/2012
+   5:../Sources/Clock.c ****  *      Author: podonoghue
+   6:../Sources/Clock.c ****  */
+   7:../Sources/Clock.c **** #include "derivative.h" /* include peripheral declarations */
+   8:../Sources/Clock.c **** #include "clock.h"
+   9:../Sources/Clock.c **** 
+  10:../Sources/Clock.c **** const uint32_t SystemCoreClock = 48000000; // Hz
+  11:../Sources/Clock.c **** const uint32_t PeripheralClock = 48000000; // Hz
+  12:../Sources/Clock.c **** 
+  13:../Sources/Clock.c **** /*! Sets up the clock for USB operation (out of RESET)
+  14:../Sources/Clock.c ****  *!
+  15:../Sources/Clock.c ****  *! MCGOUTCLK = 48MHz
+  16:../Sources/Clock.c ****  *! core/platform/system clock = PLL (48MHz), 
+  17:../Sources/Clock.c ****  *! bus clock = PLL (48MHz),
+  18:../Sources/Clock.c ****  *! flash clock = PLL/2 (24MHz)
+  19:../Sources/Clock.c ****  *!
+  20:../Sources/Clock.c ****  *! Assumes 8 MHz external crystal
+  21:../Sources/Clock.c ****  *!
+  22:../Sources/Clock.c ****  *! Modes: FEI [FLL engaged internal] -> 
+  23:../Sources/Clock.c ****  *!        FBE [FLL bypassed external] ->
+  24:../Sources/Clock.c ****  *!        PBE [PLL bypassed external] ->
+  25:../Sources/Clock.c ****  *!        PEE [PLL engaged external]
+  26:../Sources/Clock.c ****  *!
+  27:../Sources/Clock.c ****  *! Refer 24.5.3.1 of K20 Family reference
+  28:../Sources/Clock.c ****  */
+  29:../Sources/Clock.c **** void initClock(void) {
+  41              		.loc 1 29 0
+  42              		.cfi_startproc
+  43              		@ args = 0, pretend = 0, frame = 8
+  44              		@ frame_needed = 1, uses_anonymous_args = 0
+  45              		@ link register save eliminated.
+  46 0000 80B4     		push	{r7}
+  47              	.LCFI0:
+  48              		.cfi_def_cfa_offset 4
+  49              		.cfi_offset 7, -4
+  50 0002 83B0     		sub	sp, sp, #12
+  51              	.LCFI1:
+  52              		.cfi_def_cfa_offset 16
+  53 0004 00AF     		add	r7, sp, #0
+  54              	.LCFI2:
+  55              		.cfi_def_cfa_register 7
+  30:../Sources/Clock.c ****    MCG_C7 = 0; // OSCSEL = 0 => Crystal Osc
+  56              		.loc 1 30 0
+  57 0006 4FF48043 		mov	r3, #16384
+  58 000a C4F20603 		movt	r3, 16390
+  59 000e 4FF00002 		mov	r2, #0
+  60 0012 1A73     		strb	r2, [r3, #12]
+  31:../Sources/Clock.c ****    
+  32:../Sources/Clock.c ****    // Out of reset MCG is in FEI mode
+  33:../Sources/Clock.c ****    // Configure the Crystal Oscillator
+  34:../Sources/Clock.c ****    OSC0_CR = OSC_CR_SC16P_MASK; // OSC_CR_SC16P_MASK; 
+  61              		.loc 1 34 0
+  62 0014 4FF4A043 		mov	r3, #20480
+  63 0018 C4F20603 		movt	r3, 16390
+  64 001c 4FF00102 		mov	r2, #1
+  65 0020 1A70     		strb	r2, [r3, #0]
+  35:../Sources/Clock.c ****    
+  36:../Sources/Clock.c ****    // 1. Switch from FEI (FLL engaged internal) to FBE (FLL bypassed external)
+  37:../Sources/Clock.c ****    
+  38:../Sources/Clock.c ****    // 1 a) Set up crystal 
+  39:../Sources/Clock.c ****    MCG_C2 =                         // oscillator in low power mode (w/o Rf)
+  66              		.loc 1 39 0
+  67 0022 4FF48043 		mov	r3, #16384
+  68 0026 C4F20603 		movt	r3, 16390
+  69 002a 4FF01502 		mov	r2, #21
+  70 002e 5A70     		strb	r2, [r3, #1]
+  40:../Sources/Clock.c ****             MCG_C2_EREFS0_MASK |    // because crystal is being used
+  41:../Sources/Clock.c ****             MCG_C2_RANGE0(1)   |    // 4 or 8 MHz is in high freq range
+  42:../Sources/Clock.c ****             MCG_C2_IRCS_MASK;
+  43:../Sources/Clock.c ****  
+  44:../Sources/Clock.c ****    // 1 b) Select clock mode
+  45:../Sources/Clock.c ****    MCG_C1 =  MCG_C1_CLKS(2)       |   // CLKS = 10   -> External reference clock
+  71              		.loc 1 45 0
+  72 0030 4FF48043 		mov	r3, #16384
+  73 0034 C4F20603 		movt	r3, 16390
+  74 0038 4FF09A02 		mov	r2, #154
+  75 003c 1A70     		strb	r2, [r3, #0]
+  46:../Sources/Clock.c ****              MCG_C1_FRDIV(3)      |   // FRDIV = 3   -> 8MHz/256 = 31.25 kHz
+  47:../Sources/Clock.c ****              MCG_C1_IRCLKEN_MASK;     // IRCLKEN = 1 -> MCGIRCLK active
+  48:../Sources/Clock.c ****    
+  49:../Sources/Clock.c ****    // Make sure - reset default
+  50:../Sources/Clock.c ****    MCG_C4 &= ~(MCG_C4_DMX32_MASK|MCG_C4_DRST_DRS_MASK);
+  76              		.loc 1 50 0
+  77 003e 4FF48043 		mov	r3, #16384
+  78 0042 C4F20603 		movt	r3, 16390
+  79 0046 4FF48042 		mov	r2, #16384
+  80 004a C4F20602 		movt	r2, 16390
+  81 004e D278     		ldrb	r2, [r2, #3]
+  82 0050 D2B2     		uxtb	r2, r2
+  83 0052 02F01F02 		and	r2, r2, #31
+  84 0056 D2B2     		uxtb	r2, r2
+  85 0058 DA70     		strb	r2, [r3, #3]
+  51:../Sources/Clock.c ****    
+  52:../Sources/Clock.c ****    // 1 c) Wait for crystal to start up        
+  53:../Sources/Clock.c ****    while ((MCG_S & MCG_S_OSCINIT0_MASK) == 0) {
+  86              		.loc 1 53 0
+  87 005a 00BF     		nop
+  88              	.L2:
+  89              		.loc 1 53 0 is_stmt 0
+  90 005c 4FF48043 		mov	r3, #16384
+  91 0060 C4F20603 		movt	r3, 16390
+  92 0064 9B79     		ldrb	r3, [r3, #6]
+  93 0066 DBB2     		uxtb	r3, r3
+  94 0068 03F00203 		and	r3, r3, #2
+  95 006c 002B     		cmp	r3, #0
+  96 006e F5D0     		beq	.L2
+  54:../Sources/Clock.c ****    }
+  55:../Sources/Clock.c ****    // 1 d) Wait for mode change
+  56:../Sources/Clock.c ****    while ((MCG_S & MCG_S_IREFST_MASK) != 0) {
+  97              		.loc 1 56 0 is_stmt 1
+  98 0070 00BF     		nop
+  99              	.L3:
+ 100              		.loc 1 56 0 is_stmt 0
+ 101 0072 4FF48043 		mov	r3, #16384
+ 102 0076 C4F20603 		movt	r3, 16390
+ 103 007a 9B79     		ldrb	r3, [r3, #6]
+ 104 007c DBB2     		uxtb	r3, r3
+ 105 007e 03F01003 		and	r3, r3, #16
+ 106 0082 002B     		cmp	r3, #0
+ 107 0084 F5D1     		bne	.L3
+  57:../Sources/Clock.c ****    }
+  58:../Sources/Clock.c ****    // 1 e) Wait for MCGOUT indicating that the external reference to be fed to MCGOUT
+  59:../Sources/Clock.c ****    while ((MCG_S & MCG_S_CLKST_MASK) != MCG_S_CLKST(2)) {
+ 108              		.loc 1 59 0 is_stmt 1
+ 109 0086 00BF     		nop
+ 110              	.L4:
+ 111              		.loc 1 59 0 is_stmt 0
+ 112 0088 4FF48043 		mov	r3, #16384
+ 113 008c C4F20603 		movt	r3, 16390
+ 114 0090 9B79     		ldrb	r3, [r3, #6]
+ 115 0092 DBB2     		uxtb	r3, r3
+ 116 0094 03F00C03 		and	r3, r3, #12
+ 117 0098 082B     		cmp	r3, #8
+ 118 009a F5D1     		bne	.L4
+  60:../Sources/Clock.c ****    }
+  61:../Sources/Clock.c ****    
+  62:../Sources/Clock.c ****    // 2. Configure PLL Ref. Freq.
+  63:../Sources/Clock.c ****    
+  64:../Sources/Clock.c ****    // 2 a) Set PRDIV for correct range
+  65:../Sources/Clock.c ****    MCG_C5 =  MCG_C5_PLLCLKEN0_MASK |
+ 119              		.loc 1 65 0 is_stmt 1
+ 120 009c 4FF48043 		mov	r3, #16384
+ 121 00a0 C4F20603 		movt	r3, 16390
+ 122 00a4 4FF04302 		mov	r2, #67
+ 123 00a8 1A71     		strb	r2, [r3, #4]
+  66:../Sources/Clock.c ****              MCG_C5_PRDIV0(3);    // PRDIV=3, PLL Ref Freq. = 8MHz/4 => 2 MHz
+  67:../Sources/Clock.c **** 
+  68:../Sources/Clock.c ****    MCG_C6 = 0;
+ 124              		.loc 1 68 0
+ 125 00aa 4FF48043 		mov	r3, #16384
+ 126 00ae C4F20603 		movt	r3, 16390
+ 127 00b2 4FF00002 		mov	r2, #0
+ 128 00b6 5A71     		strb	r2, [r3, #5]
+  69:../Sources/Clock.c ****    
+  70:../Sources/Clock.c ****    // 3. FBE => BLPE => PBE
+  71:../Sources/Clock.c ****    // 3 a) BLPE
+  72:../Sources/Clock.c ****    MCG_C2 =                         // oscillator in low power mode (w/o external Rf)
+ 129              		.loc 1 72 0
+ 130 00b8 4FF48043 		mov	r3, #16384
+ 131 00bc C4F20603 		movt	r3, 16390
+ 132 00c0 4FF01502 		mov	r2, #21
+ 133 00c4 5A70     		strb	r2, [r3, #1]
+  73:../Sources/Clock.c ****             MCG_C2_EREFS0_MASK |    // because crystal is being used
+  74:../Sources/Clock.c ****             MCG_C2_RANGE0(1)   |    // 4 or 8 MHz is in high freq range
+  75:../Sources/Clock.c ****             MCG_C2_IRCS_MASK ;
+  76:../Sources/Clock.c ****    // 3 b) BLPE/PBE
+  77:../Sources/Clock.c ****    MCG_C6 = MCG_C6_PLLS_MASK|MCG_C6_VDIV0(0); // 2MHz x 24 = 96MHz
+ 134              		.loc 1 77 0
+ 135 00c6 4FF48043 		mov	r3, #16384
+ 136 00ca C4F20603 		movt	r3, 16390
+ 137 00ce 4FF04002 		mov	r2, #64
+ 138 00d2 5A71     		strb	r2, [r3, #5]
+  78:../Sources/Clock.c ****    // 3 c) BPE
+  79:../Sources/Clock.c ****    MCG_C2 =                         // oscillator in low power mode (w/o Rf)
+ 139              		.loc 1 79 0
+ 140 00d4 4FF48043 		mov	r3, #16384
+ 141 00d8 C4F20603 		movt	r3, 16390
+ 142 00dc 4FF01502 		mov	r2, #21
+ 143 00e0 5A70     		strb	r2, [r3, #1]
+  80:../Sources/Clock.c ****             MCG_C2_EREFS0_MASK |    // because crystal is being used
+  81:../Sources/Clock.c ****             MCG_C2_RANGE0(1)   |    // 4 or 8 MHz is in high freq range
+  82:../Sources/Clock.c ****             MCG_C2_IRCS_MASK;
+  83:../Sources/Clock.c ****    // 3 d) Wait until PLLS clock source changes to the PLL
+  84:../Sources/Clock.c ****    while((MCG_S & MCG_S_PLLST_MASK) == 0) {
+ 144              		.loc 1 84 0
+ 145 00e2 00BF     		nop
+ 146              	.L5:
+ 147              		.loc 1 84 0 is_stmt 0
+ 148 00e4 4FF48043 		mov	r3, #16384
+ 149 00e8 C4F20603 		movt	r3, 16390
+ 150 00ec 9B79     		ldrb	r3, [r3, #6]
+ 151 00ee DBB2     		uxtb	r3, r3
+ 152 00f0 03F02003 		and	r3, r3, #32
+ 153 00f4 002B     		cmp	r3, #0
+ 154 00f6 F5D0     		beq	.L5
+  85:../Sources/Clock.c ****    }
+  86:../Sources/Clock.c ****    // 3 e)  Wait for PLL to acquired lock
+  87:../Sources/Clock.c ****    while((MCG_S & MCG_S_LOCK0_MASK) == 0) {
+ 155              		.loc 1 87 0 is_stmt 1
+ 156 00f8 00BF     		nop
+ 157              	.L6:
+ 158              		.loc 1 87 0 is_stmt 0
+ 159 00fa 4FF48043 		mov	r3, #16384
+ 160 00fe C4F20603 		movt	r3, 16390
+ 161 0102 9B79     		ldrb	r3, [r3, #6]
+ 162 0104 DBB2     		uxtb	r3, r3
+ 163 0106 03F04003 		and	r3, r3, #64
+ 164 010a 002B     		cmp	r3, #0
+ 165 010c F5D0     		beq	.L6
+ 166              	.LBB2:
+  88:../Sources/Clock.c ****    }
+  89:../Sources/Clock.c ****    // Set up the SIM clock dividers BEFORE switching to the PLL to ensure the
+  90:../Sources/Clock.c ****    // system clock speeds are in spec.
+  91:../Sources/Clock.c **** #if 1 || (CPU == MK20D5)
+  92:../Sources/Clock.c ****    {
+  93:../Sources/Clock.c ****    // Disable Flash pre-fetch while changing flash divider
+  94:../Sources/Clock.c ****    uint32_t temp = FMC_PFAPR;
+ 167              		.loc 1 94 0 is_stmt 1
+ 168 010e 4FF47043 		mov	r3, #61440
+ 169 0112 C4F20103 		movt	r3, 16385
+ 170 0116 1B68     		ldr	r3, [r3, #0]
+ 171 0118 7B60     		str	r3, [r7, #4]
+  95:../Sources/Clock.c ****    FMC_PFAPR |= FMC_PFAPR_M3AP_MASK|FMC_PFAPR_M2AP_MASK|FMC_PFAPR_M1AP_MASK|FMC_PFAPR_M0AP_MASK;
+ 172              		.loc 1 95 0
+ 173 011a 4FF47043 		mov	r3, #61440
+ 174 011e C4F20103 		movt	r3, 16385
+ 175 0122 4FF47042 		mov	r2, #61440
+ 176 0126 C4F20102 		movt	r2, 16385
+ 177 012a 1268     		ldr	r2, [r2, #0]
+ 178 012c 42F0FF02 		orr	r2, r2, #255
+ 179 0130 1A60     		str	r2, [r3, #0]
+  96:../Sources/Clock.c ****    // core/platform/system clock = PLL (48MHz), bus clock = PLL (48MHz), flash clock = PLL/2 (24MHz
+  97:../Sources/Clock.c ****    SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0) | SIM_CLKDIV1_OUTDIV2(0) | SIM_CLKDIV1_OUTDIV4(1);
+ 180              		.loc 1 97 0
+ 181 0132 4FF4E043 		mov	r3, #28672
+ 182 0136 C4F20403 		movt	r3, 16388
+ 183 013a 03F58253 		add	r3, r3, #4160
+ 184 013e 03F10403 		add	r3, r3, #4
+ 185 0142 4FF48032 		mov	r2, #65536
+ 186 0146 1A60     		str	r2, [r3, #0]
+  98:../Sources/Clock.c ****    FMC_PFAPR = temp;
+ 187              		.loc 1 98 0
+ 188 0148 4FF47043 		mov	r3, #61440
+ 189 014c C4F20103 		movt	r3, 16385
+ 190 0150 7A68     		ldr	r2, [r7, #4]
+ 191 0152 1A60     		str	r2, [r3, #0]
+ 192              	.LBE2:
+  99:../Sources/Clock.c ****    }
+ 100:../Sources/Clock.c **** #elif CPU == MKL25Z4
+ 101:../Sources/Clock.c ****    {
+ 102:../Sources/Clock.c ****    // Disable Flash pre-fetch while changing flash divider
+ 103:../Sources/Clock.c ****    uint32_t temp = FMC_PFAPR;
+ 104:../Sources/Clock.c ****    FMC_PFAPR |= FMC_PFAPR_M3AP_MASK|FMC_PFAPR_M2AP_MASK|FMC_PFAPR_M1AP_MASK|FMC_PFAPR_M0AP_MASK;
+ 105:../Sources/Clock.c ****    // core/platform/system clock = PLL/2 (48MHz), bus clock/flash clock = PLL/2/2 (24MHz)
+ 106:../Sources/Clock.c ****    SIM_CLKDIV1 = SIM_CLKDIV1_OUTDIV1(1) | SIM_CLKDIV1_OUTDIV4(1);
+ 107:../Sources/Clock.c ****    FMC_PFAPR = temp;
+ 108:../Sources/Clock.c ****    }
+ 109:../Sources/Clock.c **** #endif
+ 110:../Sources/Clock.c ****    
+ 111:../Sources/Clock.c ****    // 4. PBE mode transitions into PEE mode:
+ 112:../Sources/Clock.c ****    // 4 a) Select clock mode
+ 113:../Sources/Clock.c ****    MCG_C1 = MCG_C1_CLKS(0)  |    // CLKS  = 0 -> FLL or PLL is selected
+ 193              		.loc 1 113 0
+ 194 0154 4FF48043 		mov	r3, #16384
+ 195 0158 C4F20603 		movt	r3, 16390
+ 196 015c 4FF01A02 		mov	r2, #26
+ 197 0160 1A70     		strb	r2, [r3, #0]
+ 114:../Sources/Clock.c ****             MCG_C1_FRDIV(3) |    // FRDIV = 3 -> 8MHz/256 = 31.25 kHz
+ 115:../Sources/Clock.c ****             MCG_C1_IRCLKEN_MASK;
+ 116:../Sources/Clock.c ****    
+ 117:../Sources/Clock.c ****    // 4 b)  Wait for clock stable
+ 118:../Sources/Clock.c ****    while ((MCG_S & MCG_S_CLKST_MASK) != (3<<MCG_S_CLKST_SHIFT)) {
+ 198              		.loc 1 118 0
+ 199 0162 00BF     		nop
+ 200              	.L7:
+ 201              		.loc 1 118 0 is_stmt 0
+ 202 0164 4FF48043 		mov	r3, #16384
+ 203 0168 C4F20603 		movt	r3, 16390
+ 204 016c 9B79     		ldrb	r3, [r3, #6]
+ 205 016e DBB2     		uxtb	r3, r3
+ 206 0170 03F00C03 		and	r3, r3, #12
+ 207 0174 0C2B     		cmp	r3, #12
+ 208 0176 F5D1     		bne	.L7
+ 119:../Sources/Clock.c ****    }
+ 120:../Sources/Clock.c ****    // Now MCGOUTCLK=MCGPLLCLK=[(2 MHz / 1) * 24] = 48 MHz
+ 121:../Sources/Clock.c ****    
+ 122:../Sources/Clock.c ****    // Basic clock selection
+ 123:../Sources/Clock.c **** #if 1 || (CPU == MK20D5)
+ 124:../Sources/Clock.c ****    // Peripheral clock choice (incl. USB), USBCLK = MCGCLK
+ 125:../Sources/Clock.c ****    SIM_SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK | // PLL rather than FLL for peripheral clock
+ 209              		.loc 1 125 0 is_stmt 1
+ 210 0178 4FF4E043 		mov	r3, #28672
+ 211 017c C4F20403 		movt	r3, 16388
+ 212 0180 4FF4E042 		mov	r2, #28672
+ 213 0184 C4F20402 		movt	r2, 16388
+ 214 0188 02F58052 		add	r2, r2, #4096
+ 215 018c 02F10402 		add	r2, r2, #4
+ 216 0190 1268     		ldr	r2, [r2, #0]
+ 217 0192 42F4A022 		orr	r2, r2, #327680
+ 218 0196 03F58053 		add	r3, r3, #4096
+ 219 019a 03F10403 		add	r3, r3, #4
+ 220 019e 1A60     		str	r2, [r3, #0]
+ 126:../Sources/Clock.c ****                 SIM_SOPT2_USBSRC_MASK;     // MCGPLLCLK Source as USB clock (48MHz req.)
+ 127:../Sources/Clock.c ****    
+ 128:../Sources/Clock.c ****    // USB Clock = Divider input clock x [(USBFRAC+1)/(USBDIV+1)] 
+ 129:../Sources/Clock.c ****    // USBDIV 0-7, USBFRAC 0-1
+ 130:../Sources/Clock.c **** //   SIM_CLKDIV2 = SIM_CLKDIV2_USBDIV(1);
+ 131:../Sources/Clock.c ****    SIM_CLKDIV2 = SIM_CLKDIV2_USBDIV(0);
+ 221              		.loc 1 131 0
+ 222 01a0 4FF4E043 		mov	r3, #28672
+ 223 01a4 C4F20403 		movt	r3, 16388
+ 224 01a8 03F58253 		add	r3, r3, #4160
+ 225 01ac 03F10803 		add	r3, r3, #8
+ 226 01b0 4FF00002 		mov	r2, #0
+ 227 01b4 1A60     		str	r2, [r3, #0]
+ 132:../Sources/Clock.c **** 
+ 133:../Sources/Clock.c **** #elif CPU == MKL25Z4 
+ 134:../Sources/Clock.c ****    SIM_SOPT2 = SIM_SOPT2_UART0SRC(1)     | // MCGPLLCLK/2 as UART0 clock
+ 135:../Sources/Clock.c **** 		         SIM_SOPT2_TPMSRC(1)       | // MCGPLLCLK/2 as TPM clock
+ 136:../Sources/Clock.c **** 			      SIM_SOPT2_PLLFLLSEL_MASK  | // PLL rather than FLL for peripheral clock 
+ 137:../Sources/Clock.c ****                SIM_SOPT2_USBSRC_MASK;      // MCGPLLCLK/2 Source as USB clock (48MHz req.)
+ 138:../Sources/Clock.c **** #else
+ 139:../Sources/Clock.c ****    #error "CPU not set"
+ 140:../Sources/Clock.c **** #endif
+ 141:../Sources/Clock.c **** }
+ 228              		.loc 1 141 0
+ 229 01b6 07F10C07 		add	r7, r7, #12
+ 230 01ba BD46     		mov	sp, r7
+ 231 01bc 80BC     		pop	{r7}
+ 232 01be 7047     		bx	lr
+ 233              		.cfi_endproc
+ 234              	.LFE0:
+ 236              		.text
+ 237              	.Letext0:
+ 238              		.file 2 "C:/Freescale/CW MCU v10.5/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 239              		.file 3 "C:/Users/Jay/Documents/MC2/Projects/UNL Rover/BLDCdriver/cw_workspace/USBDM_Kinetis_BLDC/
+DEFINED SYMBOLS
+                            *ABS*:00000000 Clock.c
+C:\Users\Jay\AppData\Local\Temp\ccYl09sw.s:23     .rodata.SystemCoreClock:00000000 SystemCoreClock
+C:\Users\Jay\AppData\Local\Temp\ccYl09sw.s:20     .rodata.SystemCoreClock:00000000 $d
+C:\Users\Jay\AppData\Local\Temp\ccYl09sw.s:30     .rodata.PeripheralClock:00000000 PeripheralClock
+C:\Users\Jay\AppData\Local\Temp\ccYl09sw.s:27     .rodata.PeripheralClock:00000000 $d
+C:\Users\Jay\AppData\Local\Temp\ccYl09sw.s:33     .text.initClock:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\ccYl09sw.s:38     .text.initClock:00000000 initClock
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

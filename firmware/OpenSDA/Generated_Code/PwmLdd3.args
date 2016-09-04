@@ -1,0 +1,22 @@
+-mcpu=cortex-m4
+-mthumb
+-mfloat-abi=soft
+-g3
+-gdwarf-2
+-gstrict-dwarf
+-nostdinc
+-DTARGET_HARDWARE=H_USBDM_OPENSDA
+-I"C:/Users/Jay/Documents/MC2/Projects/UNL Rover/BLDCdriver/cw_workspace/USBDM_Kinetis_BLDC/Project_Headers"
+-I"C:/Users/Jay/Documents/MC2/Projects/UNL Rover/BLDCdriver/cw_workspace/USBDM_Kinetis_BLDC/Project_Settings/Startup_Code"
+-I"C:/Freescale/CW MCU v10.5/MCU/ARM_GCC_Support/ewl/EWL_C/include"
+-I"C:/Freescale/CW MCU v10.5/MCU/ARM_GCC_Support/ewl/EWL_Runtime/include"
+-I"C:/Freescale/CW MCU v10.5/MCU/ProcessorExpert/lib/Kinetis/iofiles"
+-I"C:/Freescale/CW MCU v10.5/MCU/ProcessorExpert/lib/Kinetis/pdd/inc"
+-I"C:/Users/Jay/Documents/MC2/Projects/UNL Rover/BLDCdriver/cw_workspace/USBDM_Kinetis_BLDC/Sources"
+-I"C:/Users/Jay/Documents/MC2/Projects/UNL Rover/BLDCdriver/cw_workspace/USBDM_Kinetis_BLDC/Generated_Code"
+-O0
+-ffunction-sections
+-fdata-sections
+-Wall
+-c
+-fmessage-length=0

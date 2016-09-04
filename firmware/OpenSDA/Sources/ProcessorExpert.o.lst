@@ -1,0 +1,224 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"ProcessorExpert.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.initPorts,"ax",%progbits
+  19              		.align	2
+  20              		.global	initPorts
+  21              		.thumb
+  22              		.thumb_func
+  24              	initPorts:
+  25              	.LFB0:
+  26              		.file 1 "../Sources/ProcessorExpert.c"
+   1:../Sources/ProcessorExpert.c **** /* ###################################################################
+   2:../Sources/ProcessorExpert.c **** **     Filename    : ProcessorExpert.c
+   3:../Sources/ProcessorExpert.c **** **     Project     : ProcessorExpert
+   4:../Sources/ProcessorExpert.c **** **     Processor   : MK20DX128VLH5
+   5:../Sources/ProcessorExpert.c **** **     Version     : Driver 01.01
+   6:../Sources/ProcessorExpert.c **** **     Compiler    : GNU C Compiler
+   7:../Sources/ProcessorExpert.c **** **     Date/Time   : 2013-09-21, 14:42, # CodeGen: 0
+   8:../Sources/ProcessorExpert.c **** **     Abstract    :
+   9:../Sources/ProcessorExpert.c **** **         Main module.
+  10:../Sources/ProcessorExpert.c **** **         This module contains user's application code.
+  11:../Sources/ProcessorExpert.c **** **     Settings    :
+  12:../Sources/ProcessorExpert.c **** **     Contents    :
+  13:../Sources/ProcessorExpert.c **** **         No public methods
+  14:../Sources/ProcessorExpert.c **** **
+  15:../Sources/ProcessorExpert.c **** ** ###################################################################*/
+  16:../Sources/ProcessorExpert.c **** /*!
+  17:../Sources/ProcessorExpert.c **** ** @file ProcessorExpert.c
+  18:../Sources/ProcessorExpert.c **** ** @version 01.01
+  19:../Sources/ProcessorExpert.c **** ** @brief
+  20:../Sources/ProcessorExpert.c **** **         Main module.
+  21:../Sources/ProcessorExpert.c **** **         This module contains user's application code.
+  22:../Sources/ProcessorExpert.c **** */         
+  23:../Sources/ProcessorExpert.c **** /*!
+  24:../Sources/ProcessorExpert.c **** **  @addtogroup ProcessorExpert_module ProcessorExpert module documentation
+  25:../Sources/ProcessorExpert.c **** **  @{
+  26:../Sources/ProcessorExpert.c **** */         
+  27:../Sources/ProcessorExpert.c **** /* MODULE ProcessorExpert */
+  28:../Sources/ProcessorExpert.c **** 
+  29:../Sources/ProcessorExpert.c **** 
+  30:../Sources/ProcessorExpert.c **** /* Including needed modules to compile this module/procedure */
+  31:../Sources/ProcessorExpert.c **** #include "Cpu.h"
+  32:../Sources/ProcessorExpert.c **** #include "Events.h"
+  33:../Sources/ProcessorExpert.c **** #include "TU1.h"
+  34:../Sources/ProcessorExpert.c **** #include "PWM_B.h"
+  35:../Sources/ProcessorExpert.c **** #include "PwmLdd1.h"
+  36:../Sources/ProcessorExpert.c **** #include "PwmLdd3.h"
+  37:../Sources/ProcessorExpert.c **** #include "RESET_A.h"
+  38:../Sources/ProcessorExpert.c **** #include "BitIoLdd1.h"
+  39:../Sources/ProcessorExpert.c **** #include "RESET_B.h"
+  40:../Sources/ProcessorExpert.c **** #include "BitIoLdd2.h"
+  41:../Sources/ProcessorExpert.c **** #include "RESET_C.h"
+  42:../Sources/ProcessorExpert.c **** #include "BitIoLdd3.h"
+  43:../Sources/ProcessorExpert.c **** #include "HallA.h"
+  44:../Sources/ProcessorExpert.c **** #include "ExtIntLdd1.h"
+  45:../Sources/ProcessorExpert.c **** #include "HallB.h"
+  46:../Sources/ProcessorExpert.c **** #include "ExtIntLdd2.h"
+  47:../Sources/ProcessorExpert.c **** #include "HallC.h"
+  48:../Sources/ProcessorExpert.c **** #include "ExtIntLdd3.h"
+  49:../Sources/ProcessorExpert.c **** #include "OTW.h"
+  50:../Sources/ProcessorExpert.c **** #include "BitIoLdd4.h"
+  51:../Sources/ProcessorExpert.c **** #include "FAULT.h"
+  52:../Sources/ProcessorExpert.c **** #include "BitIoLdd5.h"
+  53:../Sources/ProcessorExpert.c **** #include "M1.h"
+  54:../Sources/ProcessorExpert.c **** #include "BitIoLdd6.h"
+  55:../Sources/ProcessorExpert.c **** #include "M2.h"
+  56:../Sources/ProcessorExpert.c **** #include "BitIoLdd7.h"
+  57:../Sources/ProcessorExpert.c **** #include "M3.h"
+  58:../Sources/ProcessorExpert.c **** #include "BitIoLdd8.h"
+  59:../Sources/ProcessorExpert.c **** #include "POT1.h"
+  60:../Sources/ProcessorExpert.c **** #include "AdcLdd1.h"
+  61:../Sources/ProcessorExpert.c **** #include "PWM_A.h"
+  62:../Sources/ProcessorExpert.c **** #include "PwmLdd2.h"
+  63:../Sources/ProcessorExpert.c **** #include "PWM_C.h"
+  64:../Sources/ProcessorExpert.c **** /* Including shared modules, which are used for whole project */
+  65:../Sources/ProcessorExpert.c **** #include "PE_Types.h"
+  66:../Sources/ProcessorExpert.c **** #include "PE_Error.h"
+  67:../Sources/ProcessorExpert.c **** #include "PE_Const.h"
+  68:../Sources/ProcessorExpert.c **** #include "IO_Map.h"
+  69:../Sources/ProcessorExpert.c **** 
+  70:../Sources/ProcessorExpert.c **** #include "derivative.h" /* include peripheral declarations */
+  71:../Sources/ProcessorExpert.c **** #include "USB.h"
+  72:../Sources/ProcessorExpert.c **** #include "Clock.h"
+  73:../Sources/ProcessorExpert.c **** #include "CmdProcessing.h"
+  74:../Sources/ProcessorExpert.c **** 
+  75:../Sources/ProcessorExpert.c **** #include "BLDC.h"
+  76:../Sources/ProcessorExpert.c **** 
+  77:../Sources/ProcessorExpert.c **** /* User includes (#include below this line is not maintained by Processor Expert) */
+  78:../Sources/ProcessorExpert.c **** void initPorts(void) {
+  27              		.loc 1 78 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32 0000 80B4     		push	{r7}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 7, -4
+  36 0002 00AF     		add	r7, sp, #0
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_register 7
+  79:../Sources/ProcessorExpert.c ****    // Enable all port clocks
+  80:../Sources/ProcessorExpert.c ****    SIM_SCGC5 |=   SIM_SCGC5_PORTA_MASK
+  39              		.loc 1 80 0
+  40 0004 4FF4E043 		mov	r3, #28672
+  41 0008 C4F20403 		movt	r3, 16388
+  42 000c 4FF4E042 		mov	r2, #28672
+  43 0010 C4F20402 		movt	r2, 16388
+  44 0014 02F58152 		add	r2, r2, #4128
+  45 0018 02F11802 		add	r2, r2, #24
+  46 001c 1268     		ldr	r2, [r2, #0]
+  47 001e 42F47852 		orr	r2, r2, #15872
+  48 0022 03F58153 		add	r3, r3, #4128
+  49 0026 03F11803 		add	r3, r3, #24
+  50 002a 1A60     		str	r2, [r3, #0]
+  81:../Sources/ProcessorExpert.c ****                 | SIM_SCGC5_PORTB_MASK
+  82:../Sources/ProcessorExpert.c ****                 | SIM_SCGC5_PORTC_MASK
+  83:../Sources/ProcessorExpert.c ****                 | SIM_SCGC5_PORTD_MASK
+  84:../Sources/ProcessorExpert.c ****                 | SIM_SCGC5_PORTE_MASK;
+  85:../Sources/ProcessorExpert.c **** //   ledInit();
+  86:../Sources/ProcessorExpert.c **** }
+  51              		.loc 1 86 0
+  52 002c BD46     		mov	sp, r7
+  53 002e 80BC     		pop	{r7}
+  54 0030 7047     		bx	lr
+  55              		.cfi_endproc
+  56              	.LFE0:
+  58 0032 00BF     		.section	.text.main,"ax",%progbits
+  59              		.align	2
+  60              		.global	main
+  61              		.thumb
+  62              		.thumb_func
+  64              	main:
+  65              	.LFB1:
+  87:../Sources/ProcessorExpert.c **** /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
+  88:../Sources/ProcessorExpert.c **** int main(void)
+  89:../Sources/ProcessorExpert.c **** /*lint -restore Enable MISRA rule (6.3) checking. */
+  90:../Sources/ProcessorExpert.c **** {
+  66              		.loc 1 90 0
+  67              		.cfi_startproc
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 1, uses_anonymous_args = 0
+  70 0000 80B5     		push	{r7, lr}
+  71              	.LCFI2:
+  72              		.cfi_def_cfa_offset 8
+  73              		.cfi_offset 7, -8
+  74              		.cfi_offset 14, -4
+  75 0002 00AF     		add	r7, sp, #0
+  76              	.LCFI3:
+  77              		.cfi_def_cfa_register 7
+  91:../Sources/ProcessorExpert.c ****   /* Write your local variable definition here */
+  92:../Sources/ProcessorExpert.c **** 
+  93:../Sources/ProcessorExpert.c ****   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
+  94:../Sources/ProcessorExpert.c ****   PE_low_level_init();
+  78              		.loc 1 94 0
+  79 0004 FFF7FEFF 		bl	PE_low_level_init
+  95:../Sources/ProcessorExpert.c ****   /*** End of Processor Expert internal initialization.                    ***/
+  96:../Sources/ProcessorExpert.c ****   initClock();
+  80              		.loc 1 96 0
+  81 0008 FFF7FEFF 		bl	initClock
+  97:../Sources/ProcessorExpert.c **** //   initPorts();
+  98:../Sources/ProcessorExpert.c **** 
+  99:../Sources/ProcessorExpert.c ****    initUSB();
+  82              		.loc 1 99 0
+  83 000c FFF7FEFF 		bl	initUSB
+ 100:../Sources/ProcessorExpert.c **** //   initTimers();
+ 101:../Sources/ProcessorExpert.c ****    BLDC_Init();
+  84              		.loc 1 101 0
+  85 0010 FFF7FEFF 		bl	BLDC_Init
+ 102:../Sources/ProcessorExpert.c ****    BLDC_Update(); // update the motor to the first position to trigger the interrupts.
+  86              		.loc 1 102 0
+  87 0014 FFF7FEFF 		bl	BLDC_Update
+ 103:../Sources/ProcessorExpert.c ****    commandLoop();
+  88              		.loc 1 103 0
+  89 0018 FFF7FEFF 		bl	commandLoop
+  90              	.L3:
+ 104:../Sources/ProcessorExpert.c ****   /* Write your code here */
+ 105:../Sources/ProcessorExpert.c ****   /* For example: for(;;) { } */
+ 106:../Sources/ProcessorExpert.c **** 
+ 107:../Sources/ProcessorExpert.c ****   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
+ 108:../Sources/ProcessorExpert.c ****   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS 
+ 109:../Sources/ProcessorExpert.c ****   #ifdef PEX_RTOS_START
+ 110:../Sources/ProcessorExpert.c ****     PEX_RTOS_START();                  /* Startup of the selected RTOS. Macro is defined by the RTO
+ 111:../Sources/ProcessorExpert.c ****   #endif
+ 112:../Sources/ProcessorExpert.c ****   /*** End of RTOS startup code.  ***/
+ 113:../Sources/ProcessorExpert.c ****   /*** Processor Expert end of main routine. DON'T MODIFY THIS CODE!!! ***/
+ 114:../Sources/ProcessorExpert.c ****   for(;;){}
+  91              		.loc 1 114 0
+  92 001c FEE7     		b	.L3
+  93              		.cfi_endproc
+  94              	.LFE1:
+  96 001e 00BF     		.text
+  97              	.Letext0:
+  98              		.file 2 "C:/Freescale/CW MCU v10.5/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+  99              		.file 3 "C:/Users/Jay/Documents/MC2/Projects/UNL Rover/BLDCdriver/cw_workspace/USBDM_Kinetis_BLDC/
+DEFINED SYMBOLS
+                            *ABS*:00000000 ProcessorExpert.c
+C:\Users\Jay\AppData\Local\Temp\cc4ADYvv.s:19     .text.initPorts:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\cc4ADYvv.s:24     .text.initPorts:00000000 initPorts
+C:\Users\Jay\AppData\Local\Temp\cc4ADYvv.s:59     .text.main:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\cc4ADYvv.s:64     .text.main:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+PE_low_level_init
+initClock
+initUSB
+BLDC_Init
+BLDC_Update
+commandLoop

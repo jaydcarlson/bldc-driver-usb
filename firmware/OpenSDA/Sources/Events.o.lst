@@ -1,0 +1,336 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"Events.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.Cpu_OnNMIINT0,"ax",%progbits
+  19              		.align	2
+  20              		.global	Cpu_OnNMIINT0
+  21              		.thumb
+  22              		.thumb_func
+  24              	Cpu_OnNMIINT0:
+  25              	.LFB0:
+  26              		.file 1 "../Sources/Events.c"
+   1:../Sources/Events.c **** /* ###################################################################
+   2:../Sources/Events.c **** **     Filename    : Events.c
+   3:../Sources/Events.c **** **     Project     : ProcessorExpert
+   4:../Sources/Events.c **** **     Processor   : MK20DX128VLH5
+   5:../Sources/Events.c **** **     Component   : Events
+   6:../Sources/Events.c **** **     Version     : Driver 01.00
+   7:../Sources/Events.c **** **     Compiler    : GNU C Compiler
+   8:../Sources/Events.c **** **     Date/Time   : 2013-09-21, 14:42, # CodeGen: 0
+   9:../Sources/Events.c **** **     Abstract    :
+  10:../Sources/Events.c **** **         This is user's event module.
+  11:../Sources/Events.c **** **         Put your event handler code here.
+  12:../Sources/Events.c **** **     Settings    :
+  13:../Sources/Events.c **** **     Contents    :
+  14:../Sources/Events.c **** **         Cpu_OnNMIINT0 - void Cpu_OnNMIINT0(void);
+  15:../Sources/Events.c **** **
+  16:../Sources/Events.c **** ** ###################################################################*/
+  17:../Sources/Events.c **** /*!
+  18:../Sources/Events.c **** ** @file Events.c
+  19:../Sources/Events.c **** ** @version 01.00
+  20:../Sources/Events.c **** ** @brief
+  21:../Sources/Events.c **** **         This is user's event module.
+  22:../Sources/Events.c **** **         Put your event handler code here.
+  23:../Sources/Events.c **** */         
+  24:../Sources/Events.c **** /*!
+  25:../Sources/Events.c **** **  @addtogroup Events_module Events module documentation
+  26:../Sources/Events.c **** **  @{
+  27:../Sources/Events.c **** */         
+  28:../Sources/Events.c **** /* MODULE Events */
+  29:../Sources/Events.c **** 
+  30:../Sources/Events.c **** #include "Cpu.h"
+  31:../Sources/Events.c **** #include "Events.h"
+  32:../Sources/Events.c **** 
+  33:../Sources/Events.c **** #ifdef __cplusplus
+  34:../Sources/Events.c **** extern "C" {
+  35:../Sources/Events.c **** #endif 
+  36:../Sources/Events.c **** 
+  37:../Sources/Events.c **** 
+  38:../Sources/Events.c **** /* User includes (#include below this line is not maintained by Processor Expert) */
+  39:../Sources/Events.c **** #include "BLDC.h"
+  40:../Sources/Events.c **** /*
+  41:../Sources/Events.c **** ** ===================================================================
+  42:../Sources/Events.c **** **     Event       :  Cpu_OnNMIINT0 (module Events)
+  43:../Sources/Events.c **** **
+  44:../Sources/Events.c **** **     Component   :  Cpu [MK20DX128EX5]
+  45:../Sources/Events.c **** **     Description :
+  46:../Sources/Events.c **** **         This event is called when the Non maskable interrupt had
+  47:../Sources/Events.c **** **         occurred. This event is automatically enabled when the <NMI
+  48:../Sources/Events.c **** **         interrupt> property is set to 'Enabled'.
+  49:../Sources/Events.c **** **     Parameters  : None
+  50:../Sources/Events.c **** **     Returns     : Nothing
+  51:../Sources/Events.c **** ** ===================================================================
+  52:../Sources/Events.c **** */
+  53:../Sources/Events.c **** void Cpu_OnNMIINT0(void)
+  54:../Sources/Events.c **** {
+  27              		.loc 1 54 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32 0000 80B4     		push	{r7}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 7, -4
+  36 0002 00AF     		add	r7, sp, #0
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_register 7
+  55:../Sources/Events.c ****   /* Write your code here ... */
+  56:../Sources/Events.c **** }
+  39              		.loc 1 56 0
+  40 0004 BD46     		mov	sp, r7
+  41 0006 80BC     		pop	{r7}
+  42 0008 7047     		bx	lr
+  43              		.cfi_endproc
+  44              	.LFE0:
+  46 000a 00BF     		.section	.text.HallC_OnInterrupt,"ax",%progbits
+  47              		.align	2
+  48              		.global	HallC_OnInterrupt
+  49              		.thumb
+  50              		.thumb_func
+  52              	HallC_OnInterrupt:
+  53              	.LFB1:
+  57:../Sources/Events.c **** 
+  58:../Sources/Events.c **** /*
+  59:../Sources/Events.c **** ** ===================================================================
+  60:../Sources/Events.c **** **     Event       :  HallC_OnInterrupt (module Events)
+  61:../Sources/Events.c **** **
+  62:../Sources/Events.c **** **     Component   :  HallC [ExtInt]
+  63:../Sources/Events.c **** **     Description :
+  64:../Sources/Events.c **** **         This event is called when an active signal edge/level has
+  65:../Sources/Events.c **** **         occurred.
+  66:../Sources/Events.c **** **     Parameters  : None
+  67:../Sources/Events.c **** **     Returns     : Nothing
+  68:../Sources/Events.c **** ** ===================================================================
+  69:../Sources/Events.c **** */
+  70:../Sources/Events.c **** void HallC_OnInterrupt(void)
+  71:../Sources/Events.c **** {
+  54              		.loc 1 71 0
+  55              		.cfi_startproc
+  56              		@ args = 0, pretend = 0, frame = 0
+  57              		@ frame_needed = 1, uses_anonymous_args = 0
+  58 0000 80B5     		push	{r7, lr}
+  59              	.LCFI2:
+  60              		.cfi_def_cfa_offset 8
+  61              		.cfi_offset 7, -8
+  62              		.cfi_offset 14, -4
+  63 0002 00AF     		add	r7, sp, #0
+  64              	.LCFI3:
+  65              		.cfi_def_cfa_register 7
+  72:../Sources/Events.c ****   /* Write your code here ... */
+  73:../Sources/Events.c **** 	BLDC_Update();
+  66              		.loc 1 73 0
+  67 0004 FFF7FEFF 		bl	BLDC_Update
+  74:../Sources/Events.c **** }
+  68              		.loc 1 74 0
+  69 0008 80BD     		pop	{r7, pc}
+  70              		.cfi_endproc
+  71              	.LFE1:
+  73 000a 00BF     		.section	.text.HallB_OnInterrupt,"ax",%progbits
+  74              		.align	2
+  75              		.global	HallB_OnInterrupt
+  76              		.thumb
+  77              		.thumb_func
+  79              	HallB_OnInterrupt:
+  80              	.LFB2:
+  75:../Sources/Events.c **** 
+  76:../Sources/Events.c **** /*
+  77:../Sources/Events.c **** ** ===================================================================
+  78:../Sources/Events.c **** **     Event       :  HallB_OnInterrupt (module Events)
+  79:../Sources/Events.c **** **
+  80:../Sources/Events.c **** **     Component   :  HallB [ExtInt]
+  81:../Sources/Events.c **** **     Description :
+  82:../Sources/Events.c **** **         This event is called when an active signal edge/level has
+  83:../Sources/Events.c **** **         occurred.
+  84:../Sources/Events.c **** **     Parameters  : None
+  85:../Sources/Events.c **** **     Returns     : Nothing
+  86:../Sources/Events.c **** ** ===================================================================
+  87:../Sources/Events.c **** */
+  88:../Sources/Events.c **** void HallB_OnInterrupt(void)
+  89:../Sources/Events.c **** {
+  81              		.loc 1 89 0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 0
+  84              		@ frame_needed = 1, uses_anonymous_args = 0
+  85 0000 80B5     		push	{r7, lr}
+  86              	.LCFI4:
+  87              		.cfi_def_cfa_offset 8
+  88              		.cfi_offset 7, -8
+  89              		.cfi_offset 14, -4
+  90 0002 00AF     		add	r7, sp, #0
+  91              	.LCFI5:
+  92              		.cfi_def_cfa_register 7
+  90:../Sources/Events.c ****   /* Write your code here ... */
+  91:../Sources/Events.c **** 	BLDC_Update();
+  93              		.loc 1 91 0
+  94 0004 FFF7FEFF 		bl	BLDC_Update
+  92:../Sources/Events.c **** }
+  95              		.loc 1 92 0
+  96 0008 80BD     		pop	{r7, pc}
+  97              		.cfi_endproc
+  98              	.LFE2:
+ 100 000a 00BF     		.section	.text.HallA_OnInterrupt,"ax",%progbits
+ 101              		.align	2
+ 102              		.global	HallA_OnInterrupt
+ 103              		.thumb
+ 104              		.thumb_func
+ 106              	HallA_OnInterrupt:
+ 107              	.LFB3:
+  93:../Sources/Events.c **** 
+  94:../Sources/Events.c **** /*
+  95:../Sources/Events.c **** ** ===================================================================
+  96:../Sources/Events.c **** **     Event       :  HallA_OnInterrupt (module Events)
+  97:../Sources/Events.c **** **
+  98:../Sources/Events.c **** **     Component   :  HallA [ExtInt]
+  99:../Sources/Events.c **** **     Description :
+ 100:../Sources/Events.c **** **         This event is called when an active signal edge/level has
+ 101:../Sources/Events.c **** **         occurred.
+ 102:../Sources/Events.c **** **     Parameters  : None
+ 103:../Sources/Events.c **** **     Returns     : Nothing
+ 104:../Sources/Events.c **** ** ===================================================================
+ 105:../Sources/Events.c **** */
+ 106:../Sources/Events.c **** void HallA_OnInterrupt(void)
+ 107:../Sources/Events.c **** {
+ 108              		.loc 1 107 0
+ 109              		.cfi_startproc
+ 110              		@ args = 0, pretend = 0, frame = 0
+ 111              		@ frame_needed = 1, uses_anonymous_args = 0
+ 112 0000 80B5     		push	{r7, lr}
+ 113              	.LCFI6:
+ 114              		.cfi_def_cfa_offset 8
+ 115              		.cfi_offset 7, -8
+ 116              		.cfi_offset 14, -4
+ 117 0002 00AF     		add	r7, sp, #0
+ 118              	.LCFI7:
+ 119              		.cfi_def_cfa_register 7
+ 108:../Sources/Events.c ****   /* Write your code here ... */
+ 109:../Sources/Events.c **** 	BLDC_Update();
+ 120              		.loc 1 109 0
+ 121 0004 FFF7FEFF 		bl	BLDC_Update
+ 110:../Sources/Events.c **** }
+ 122              		.loc 1 110 0
+ 123 0008 80BD     		pop	{r7, pc}
+ 124              		.cfi_endproc
+ 125              	.LFE3:
+ 127 000a 00BF     		.section	.text.POT1_OnEnd,"ax",%progbits
+ 128              		.align	2
+ 129              		.global	POT1_OnEnd
+ 130              		.thumb
+ 131              		.thumb_func
+ 133              	POT1_OnEnd:
+ 134              	.LFB4:
+ 111:../Sources/Events.c **** 
+ 112:../Sources/Events.c **** /*
+ 113:../Sources/Events.c **** ** ===================================================================
+ 114:../Sources/Events.c **** **     Event       :  POT1_OnEnd (module Events)
+ 115:../Sources/Events.c **** **
+ 116:../Sources/Events.c **** **     Component   :  POT1 [ADC]
+ 117:../Sources/Events.c **** **     Description :
+ 118:../Sources/Events.c **** **         This event is called after the measurement (which consists
+ 119:../Sources/Events.c **** **         of <1 or more conversions>) is/are finished.
+ 120:../Sources/Events.c **** **         The event is available only when the <Interrupt
+ 121:../Sources/Events.c **** **         service/event> property is enabled.
+ 122:../Sources/Events.c **** **     Parameters  : None
+ 123:../Sources/Events.c **** **     Returns     : Nothing
+ 124:../Sources/Events.c **** ** ===================================================================
+ 125:../Sources/Events.c **** */
+ 126:../Sources/Events.c **** void POT1_OnEnd(void)
+ 127:../Sources/Events.c **** {
+ 135              		.loc 1 127 0
+ 136              		.cfi_startproc
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 1, uses_anonymous_args = 0
+ 139              		@ link register save eliminated.
+ 140 0000 80B4     		push	{r7}
+ 141              	.LCFI8:
+ 142              		.cfi_def_cfa_offset 4
+ 143              		.cfi_offset 7, -4
+ 144 0002 00AF     		add	r7, sp, #0
+ 145              	.LCFI9:
+ 146              		.cfi_def_cfa_register 7
+ 128:../Sources/Events.c ****   /* Write your code here ... */
+ 129:../Sources/Events.c **** }
+ 147              		.loc 1 129 0
+ 148 0004 BD46     		mov	sp, r7
+ 149 0006 80BC     		pop	{r7}
+ 150 0008 7047     		bx	lr
+ 151              		.cfi_endproc
+ 152              	.LFE4:
+ 154 000a 00BF     		.section	.text.POT1_OnCalibrationEnd,"ax",%progbits
+ 155              		.align	2
+ 156              		.global	POT1_OnCalibrationEnd
+ 157              		.thumb
+ 158              		.thumb_func
+ 160              	POT1_OnCalibrationEnd:
+ 161              	.LFB5:
+ 130:../Sources/Events.c **** 
+ 131:../Sources/Events.c **** /*
+ 132:../Sources/Events.c **** ** ===================================================================
+ 133:../Sources/Events.c **** **     Event       :  POT1_OnCalibrationEnd (module Events)
+ 134:../Sources/Events.c **** **
+ 135:../Sources/Events.c **** **     Component   :  POT1 [ADC]
+ 136:../Sources/Events.c **** **     Description :
+ 137:../Sources/Events.c **** **         This event is called when the calibration has been finished.
+ 138:../Sources/Events.c **** **         User should check if the calibration pass or fail by
+ 139:../Sources/Events.c **** **         Calibration status method./nThis event is enabled only if
+ 140:../Sources/Events.c **** **         the <Interrupt service/event> property is enabled.
+ 141:../Sources/Events.c **** **     Parameters  : None
+ 142:../Sources/Events.c **** **     Returns     : Nothing
+ 143:../Sources/Events.c **** ** ===================================================================
+ 144:../Sources/Events.c **** */
+ 145:../Sources/Events.c **** void POT1_OnCalibrationEnd(void)
+ 146:../Sources/Events.c **** {
+ 162              		.loc 1 146 0
+ 163              		.cfi_startproc
+ 164              		@ args = 0, pretend = 0, frame = 0
+ 165              		@ frame_needed = 1, uses_anonymous_args = 0
+ 166              		@ link register save eliminated.
+ 167 0000 80B4     		push	{r7}
+ 168              	.LCFI10:
+ 169              		.cfi_def_cfa_offset 4
+ 170              		.cfi_offset 7, -4
+ 171 0002 00AF     		add	r7, sp, #0
+ 172              	.LCFI11:
+ 173              		.cfi_def_cfa_register 7
+ 147:../Sources/Events.c ****   /* Write your code here ... */
+ 148:../Sources/Events.c **** }
+ 174              		.loc 1 148 0
+ 175 0004 BD46     		mov	sp, r7
+ 176 0006 80BC     		pop	{r7}
+ 177 0008 7047     		bx	lr
+ 178              		.cfi_endproc
+ 179              	.LFE5:
+ 181 000a 00BF     		.text
+ 182              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Events.c
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:19     .text.Cpu_OnNMIINT0:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:24     .text.Cpu_OnNMIINT0:00000000 Cpu_OnNMIINT0
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:47     .text.HallC_OnInterrupt:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:52     .text.HallC_OnInterrupt:00000000 HallC_OnInterrupt
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:74     .text.HallB_OnInterrupt:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:79     .text.HallB_OnInterrupt:00000000 HallB_OnInterrupt
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:101    .text.HallA_OnInterrupt:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:106    .text.HallA_OnInterrupt:00000000 HallA_OnInterrupt
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:128    .text.POT1_OnEnd:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:133    .text.POT1_OnEnd:00000000 POT1_OnEnd
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:155    .text.POT1_OnCalibrationEnd:00000000 $t
+C:\Users\Jay\AppData\Local\Temp\ccmMlTaw.s:160    .text.POT1_OnCalibrationEnd:00000000 POT1_OnCalibrationEnd
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+BLDC_Update
